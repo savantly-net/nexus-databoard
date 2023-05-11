@@ -5,4 +5,5 @@ page_config.set_page_config()
 
 cfg = config.Config()
 
-st.header('Savantly Nexus Analytics')
+st.header(cfg.app_name)
+st.write(cfg.app_description)
