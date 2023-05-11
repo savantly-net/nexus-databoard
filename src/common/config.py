@@ -41,3 +41,6 @@ class Config(metaclass=Singleton):
         self.mailgun_api_key = os.getenv("MAILGUN_API_KEY", "123123123")
         self.mailgun_api_url = os.getenv("MAILGUN_API_URL", "https://api.mailgun.net/v3/sandbox123123123.mailgun.org/messages")
         self.app_name = os.getenv("APP_NAME", "Savantly Nexus Analytics")
+        self.app_description = os.getenv("APP_DESCRIPTION", """
+        This application provides the boilerplate for building data science applications.
+        """)
