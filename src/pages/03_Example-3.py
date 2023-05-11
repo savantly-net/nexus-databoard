@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from common import page_config
+page_config.set_page_config()
+
+st.write("# Example 3 uses vega-lite charts")
 
 chart_data = pd.DataFrame(
     np.random.randn(200, 3),
