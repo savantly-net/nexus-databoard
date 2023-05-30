@@ -6,6 +6,12 @@ This application provides the boilerplate to rapidly build data applications on 
 ## Quick Start
 There are a few options to get started rapidly.  
 
+There's a pypi project, but still working out the best way to leverage this.  
+
+```
+pip install nexus-databoard
+```
+
 ### Clone
 Clone the repository, and do `pip install -r requirements.txt`  
 
