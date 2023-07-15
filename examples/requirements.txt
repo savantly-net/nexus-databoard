@@ -1,0 +1,12 @@
+altair==4.2.2
+# psycopg2==2.9.6
+psycopg2-binary==2.9.6
+streamlit==1.24.0
+vega_datasets
+plotly
+openpyxl
+nexus-databoard
+IPython
+pandas==2.0.3
+python-dotenv
+xlsxwriter

@@ -1,0 +1,20 @@
+services:
+  nexus_analytics:
+    image: savantly/nexus-databoard:latest
+    container_name: savantly-custom-report
+    command: ["sh", "-c", "/entrypoint.sh"]
+    ports:
+      - 8501:8501
+    environment: []
+    volumes:
+      - ./pages:/app/pages
+      - ./entrypoint.sh:/entrypoint.sh
+
+  db:
+      image: postgres
+      environment:
+        - POSTGRES_USER=yourusername
+        - POSTGRES_PASSWORD=yourpassword
+        - POSTGRES_DB=yourdatabase
+      volumes:
+        - ./data:/var/lib/postgresql/data
