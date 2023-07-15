@@ -1,2 +1,2 @@
-pip install openpyxl
-streamlit run /app/Home.py
+# pip install openpyxl
+# streamlit run /app/Home.py
