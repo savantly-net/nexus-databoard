@@ -6,11 +6,7 @@ from zipfile import ZipFile
 import streamlit as st
 import pandas as pd
 from pandas import DataFrame
-import nexus_databoard
-from nexus_databoard.components import table, download
-from IPython.display import HTML
 from openpyxl import load_workbook
-from pathlib import Path
 
 project_directory = os.path.dirname(os.path.realpath(__file__)) + "/.."
 
@@ -101,53 +97,68 @@ def show_download_button(label, file_path, file_name, mime="application/vnd.ms-e
     )
 
 
-def extract_custom_remort(file):
+def extract_custom_remort(file, date_range, categories, models, locations):
     st.write("custom_remort")
     df = pd.read_excel(file, sheet_name='custom_remort', header=1)
 
-    # delete the first column
-    del df[df.columns[0]]
-    
-    # delete the extra columns at the end
-    del df[df.columns[10]]
-    del df[df.columns[9]]
-    del df[df.columns[8]]
+    # Filter data based on dropdown selections
+    df_filtered = df.copy()
+    if date_range == "Last Week":
+        # Filter data for the last week
+        # Modify this section to apply the appropriate filtering logic based on your data's date column
+        pass
+    elif date_range == "Last Month":
+        # Filter data for the last month
+        pass
+    elif date_range == "Last Quarter":
+        # Filter data for the last quarter
+        pass
+    elif date_range == "Last Year":
+        # Filter data for the last year
+        pass
 
-    # Don't include rows where the total is 0
-    df = df[df.iloc[:, 4] != "0"]
-    
-    # Create the columns for the exported sheet
-    df_exported = pd.DataFrame()
-    df_exported['Name'] = "" 
-    
-    df_exported = df_exported[~df_exported['Description'].isin(['-', 'non'])]
-    df_exported = df_exported.dropna(subset=['Description'])
+    if categories:
+        df_filtered = df_filtered[df_filtered['cat_name'].isin(categories)]
+
+    if models:
+        df_filtered = df_filtered[df_filtered['mode_name'].isin(models)]
+
+    if locations:
+        df_filtered = df_filtered[df_filtered['location_name'].isin(locations)]
+
+    # Group by the required columns and calculate the sums
+    df_grouped = df_filtered.groupby(['location_id', 'location_name', 'cat_name', 'mode_name', 'pos_key', 'store_id']).agg({
+        'discpric': 'sum',
+        'price': 'sum',
+        'incltax': 'sum',
+        'quantity': 'sum',
+        'excltax': 'sum'
+    }).reset_index()
 
     sheet_name = "custom_remort's"  # New sheet name
-    write_sheet_to_xls_file(df_exported, sheet_name, export_custom_remort_file_path, template_path=EMPTY_FILE_TYPE.custom_remort)
-    draw_table(df_exported)
+    write_sheet_to_xls_file(df_grouped, sheet_name, export_custom_remort_file_path, template_path=EMPTY_FILE_TYPE.custom_remort)
+    draw_table(df_grouped)
 
-
-        
-def parse_file(file):
-    if file is not None:
-
-        st.subheader("custom_remorts")
-        extract_custom_remort(file)
-        # Add download button
-        show_download_button("Download custom_remort", export_custom_remort_file_path, export_custom_remort_file_name)
 
 ################## Main ##################
 st.title("Savantly Custom Report")
-st.write("Upload a file to generate report")
+st.write("Choose the options to generate the report")
 
-def reset_session_id():
-    create_new_session_id()
+# Dropdown options
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    date_range = st.selectbox("Date Range", ["Last Week", "Last Month", "Last Quarter", "Last Year"])
+with col2:
+    categories = st.multiselect("Categories", ["Category A", "Category B", "Category C"])
+with col3:
+    models = st.multiselect("Models", ["Model X", "Model Y", "Model Z"])
+with col4:
+    locations = st.multiselect("Locations", ["Location A", "Location B", "Location C"])
 
-file = st.file_uploader("Upload a file", type=["xls", "xlsx"], on_change=reset_session_id)
+file = st.file_uploader("Upload a file", type=["xls", "xlsx"])
 
 if file is not None:
-    parse_file(file)
+    extract_custom_remort(file, date_range, categories, models, locations)
 
     st.subheader("Download All as Zip")
 
@@ -157,6 +168,10 @@ if file is not None:
     with ZipFile(zip_file_path, 'w') as zip:
         zip.write(export_custom_remort_file_path, export_custom_remort_file_name)
 
-    
     # Add download button
     show_download_button("Download Zip", zip_file_path, zip_file_name, mime="application/zip")
+
+# Print the output columns
+output_columns = ['location_id', 'location_name', 'cat_name', 'mode_name', 'pos_key', 'store_id', 'SUM(discpric)', 'SUM(price)', 'SUM(incltax)', 'SUM(quantity)', 'SUM(excltax)']
+st.subheader("Output Columns")
+st.write(output_columns)
