@@ -12,7 +12,7 @@ st.title("Example")
 today = date.today()
 yesterday = today - datetime.timedelta(days=1)
 earliest_date = date(2020, 1, 1)
-max_date = date(2023, 6, 1)
+max_date = date(2023, 12, 1)
 start_date_help = "The earliest date available is " + str(earliest_date)
 end_date_help = "The latest date available is " + str(max_date)
 
