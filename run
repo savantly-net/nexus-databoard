@@ -1,1 +1,1 @@
-streamlit run ./src/nexus_databoard/Home.py
+streamlit run ./src/Home.py

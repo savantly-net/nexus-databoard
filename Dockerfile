@@ -4,6 +4,8 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install -r requirements.txt
 
-COPY src/nexus_databoard /app
+COPY . /app
 
-CMD ["streamlit", "run", "Home.py"]
+ENTRYPOINT [ "sh", "/app/docker/entrypoint.sh" ]
+
+CMD ["streamlit", "run", "src/Home.py"]

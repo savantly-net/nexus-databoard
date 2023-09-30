@@ -1,5 +1,9 @@
-.env
-local
-private_*.py
+src/local
+.venv
 __pycache__
-dist
+.env
+/data
+pg_data
+local_settings.py
+.DS_Store
+config/oauth2-proxy-prod.cfg
